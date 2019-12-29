@@ -1,4 +1,4 @@
-package com.mingrisoft.notes.bean;
+package com.example.windows.healthy.bean;
 public class SQLBean {
 	private String _id; //主键自增id
 	private String title; //日记标题
