@@ -6,29 +6,6 @@
     android:background="@drawable/list_background"
     android:orientation="vertical">
 
-    <com.mingrisoft.notes.view.AbScrollView
-        android:id="@+id/absclv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_title"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.mingrisoft.notes.view.MyGridView
-                android:id="@+id/lv_notes"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:horizontalSpacing="10dp"
-                android:numColumns="2"
-                android:verticalSpacing="10dp"/>
-        </LinearLayout>
-    </com.mingrisoft.notes.view.AbScrollView>
-
-
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
