@@ -6,6 +6,28 @@
     android:background="@drawable/list_background"
     android:orientation="vertical">
 
+    <com.example.windows.healthy.view.AbScrollView
+        android:id="@+id/absclv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_title"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.example.windows.healthy.view.MyGridView
+                android:id="@+id/lv_notes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:horizontalSpacing="10dp"
+                android:numColumns="2"
+                android:verticalSpacing="10dp"/>
+        </LinearLayout>
+    </com.example.windows.healthy.view.AbScrollView>
+
     <RelativeLayout
         android:id="@+id/rl_title"
         android:layout_width="match_parent"
@@ -24,7 +46,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_margin="5dp"
-            android:background="@drawable/icon"/>//图标
+            android:background="@drawable/icon"/>
             android:onClick="onAbout"
             android:scaleType="fitXY" />
     <LinearLayout
@@ -81,7 +103,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_margin="5dp"
-            android:background="@drawable/rq" />//日期
+            android:background="@drawable/rq" />
             android:onClick="onData"
             android:scaleType="fitXY" />
 
