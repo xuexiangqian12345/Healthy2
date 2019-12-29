@@ -1,15 +1,25 @@
 package com.example.windows.healthy;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.InputType;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import com.example.windows.healthy.adapter.MainAdapter;
 import com.example.windows.healthy.bean.SQLBean;
 import com.example.windows.healthy.db.DatabaseOperation;
 import com.example.windows.healthy.view.MyGridView;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,11 +32,13 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseOperation dop;//自定义数据库类
     private MyGridView lv_notes;// 消息列表
     public MainAdapter adapter;
+    private TextView tv_note_id, tv_locktype, tv_lock;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         dop = new DatabaseOperation(this, db);
+        lv_notes = (MyGridView) findViewById(R.id.lv_notes);
     }
 
     @Override
@@ -34,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         // 显示记事列表
         showNotesList();
-        Log.i(TAG, "onStart1111: ");
+        // 为记事列表添加监听器
+        lv_notes.setOnItemClickListener(new ItemClickEvent());
     }
 
     private void showNotesList() {
@@ -72,4 +85,69 @@ public class MainActivity extends AppCompatActivity {
         }
         dop.close_db();//关闭数据库
     }
+
+    // 记事列表单击监听器
+    class ItemClickEvent implements OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            tv_note_id = (TextView) view.findViewById(R.id.tv_note_id);
+            tv_locktype = (TextView) view.findViewById(R.id.tv_locktype);
+            tv_lock = (TextView) view.findViewById(R.id.tv_lock);
+            String locktype = tv_locktype.getText().toString();
+            String lock = tv_lock.getText().toString();
+            int item_id = Integer.parseInt(tv_note_id.getText().toString());
+            if ("0".equals(locktype)) {
+                //Intent intent = new Intent(MainActivity.this, AddActivity.class);
+                //ntent.putExtra("editModel", "update");
+                //intent.putExtra("noteId", item_id);
+                //startActivity(intent);
+            } else {
+                //inputTitleDialog(lock, 0, item_id);
+            }
+        }
+    }
+    // 加密日记打开弹出的输入密码框
+    public void inputTitleDialog(final String lock, final int idtype,
+                                 final int item_id) {// 密码输入框
+        final EditText inputServer = new EditText(this);
+        inputServer.setInputType(InputType.TYPE_CLASS_TEXT
+                | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        inputServer.setFocusable(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("请输入密码").setView(inputServer)
+                .setNegativeButton("取消", null);
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                String inputName = inputServer.getText().toString();
+                if ("".equals(inputName)) {
+                    Toast.makeText(MainActivity.this, "密码不能为空请重新输入！",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    if (inputName.equals(lock)) {
+                        if (0 == idtype) {
+                            //Intent intent = new Intent(MainActivity.this,
+                                    //AddActivity.class);
+                            //intent.putExtra("editModel", "update");
+                            //intent.putExtra("noteId", item_id);
+                            //startActivity(intent);
+                        } else if (1 == idtype) {
+                            dop.create_db();
+                            dop.delete_db(item_id);
+                            dop.close_db();
+                            // 刷新列表显示
+                            lv_notes.invalidate();
+                            showNotesList();
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "密码不正确！",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+        builder.show();
+    }
 }
+
